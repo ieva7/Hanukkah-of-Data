@@ -12,13 +12,11 @@ def generate_phone_numbers(name: str) -> str:
     decoder = {"abc": "2", "def": "3", "ghi": "4",  "jkl": "5", "mno": "6",  "pqrs": "7", "tuv": "8","wxyz":  "9"}
 
     number = ""
-    for letter in name:
+    for letter in name.lower():
         for decode in decoder.keys():
             if letter in decode:
                 number += decoder[decode]
-    print(number)
     num = number[0:3] + "-" + number[3:6] + "-" + number[6:]
-    print(num)
     return num
 
 
@@ -34,20 +32,16 @@ def find_suspect(customers: pd.DataFrame):
     # last name is length of phone number
     customers = customers[customers["lastname"].apply(lambda x: len(x) == 10)]
 
-    print(customers)
+    # applying the function
     customers = customers[customers["phone"] == customers["lastname"].apply(generate_phone_numbers)]
 
+    # printing the final suspect(s)
     print(customers)
+    # 2187   3188  Sam Guttenberg  221 Banker St  Brooklyn, NY 11222  1998-05-30  488-836-2374  Guttenberg
+
 
 if __name__ == "__main__":
     customers = pd.read_csv(CUSTOMER_DATA)
 
     find_suspect(customers)
 
-    # for customer in customers:
-    #     last_name = customer["name"].split(' ')[1]
-    #     if len(last_name) == 10 and "0" not in customer["phone"] and "1" not in customer["phone"]:
-    #         number = generate_phone_numbers(last_name.lower())
-    #         phone = ''.join(customer["phone"].split('-'))
-    #         if number == phone:
-    #             print(customer)
