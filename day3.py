@@ -49,4 +49,4 @@ if __name__ == "__main__":
 
     print(customers)
     # 1273        2274  Brent Nguyen  109-19 110th St  South Ozone Park, NY 11420  1958-03-25  516-636-7397
-    # alternative is to look for rug cleaner!
+    # an alternative is to look for rug cleaner!
