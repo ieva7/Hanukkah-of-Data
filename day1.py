@@ -34,6 +34,7 @@ def find_suspect(customers: pd.DataFrame):
     # last name is length of phone number
     customers = customers[customers["lastname"].apply(lambda x: len(x) == 10)]
 
+    print(customers)
     customers = customers[customers["phone"] == customers["lastname"].apply(generate_phone_numbers)]
 
     print(customers)
