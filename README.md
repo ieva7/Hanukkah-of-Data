@@ -12,7 +12,6 @@ You will find my highly subjective solutions, which often equipped every tool at
 2. Please install the `requirements.txt` file, using:\
 `pip install -m requirements.txt`, or other preferred methods.
 
-
 Finally, please enjoy, and have a go yourself. The tapestry at the end is worth it.
 
 (Did anyone else think that the suspects describing various animals was an inside joke by the creators, alluding to the tapestry being so stained initially that no one could tell what animal it was?)

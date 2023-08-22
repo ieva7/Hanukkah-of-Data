@@ -2,7 +2,6 @@
 something using the letters printed on the phone buttons: like 2 has “ABC”, and 3 “DEF”, etc. And I
 guess this person had done that, so if you dialed the numbers corresponding to the letters in their name,
 it would call their phone number!"""
-
 import pandas as pd
 
 CUSTOMER_DATA = "./noahs-csv/noahs-customers.csv"
