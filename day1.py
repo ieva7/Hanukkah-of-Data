@@ -16,21 +16,37 @@ def generate_phone_numbers(name: str) -> str:
         for decode in decoder.keys():
             if letter in decode:
                 number += decoder[decode]
-    return number
+    print(number)
+    num = number[0:3] + "-" + number[3:6] + "-" + number[6:]
+    print(num)
+    return num
 
 
 def find_suspect(customers: pd.DataFrame):
     """Finds the suspect"""
 
-    customer
+    # transform the name column into a separate lastname column
+    customers["lastname"] = customers["name"].apply(lambda x: x.split(' ')[-1])
+
+    # 1 and 0 are not letters on a phone keyboard
+    customers = customers[customers["phone"].apply(lambda x: "0" not in x and "1" not in x)]
+
+    # last name is length of phone number
+    customers = customers[customers["lastname"].apply(lambda x: len(x) == 10)]
+
+    customers = customers[customers["phone"] == customers["lastname"].apply(generate_phone_numbers)]
+
+    print(customers)
 
 if __name__ == "__main__":
     customers = pd.read_csv(CUSTOMER_DATA)
 
-    for customer in customers:
-        last_name = customer["name"].split(' ')[1]
-        if len(last_name) == 10 and "0" not in customer["phone"] and "1" not in customer["phone"]:
-            number = generate_phone_numbers(last_name.lower())
-            phone = ''.join(customer["phone"].split('-'))
-            if number == phone:
-                print(customer)
+    find_suspect(customers)
+
+    # for customer in customers:
+    #     last_name = customer["name"].split(' ')[1]
+    #     if len(last_name) == 10 and "0" not in customer["phone"] and "1" not in customer["phone"]:
+    #         number = generate_phone_numbers(last_name.lower())
+    #         phone = ''.join(customer["phone"].split('-'))
+    #         if number == phone:
+    #             print(customer)
