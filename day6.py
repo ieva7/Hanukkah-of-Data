@@ -1,3 +1,8 @@
+"""Day6: She’s always been very frugal, and she clips every coupon and shops every
+sale at Noah’s Market. In fact I like to tease her that Noah actually loses money
+whenever she comes in the store. I think she’s been taking it too far lately though.
+Once the subway fare increased, she stopped coming to visit me. And she’s really slow to
+respond to my texts."""
 import pandas as pd
 
 CUSTOMER_DATA = "./noahs-csv/noahs-customers.csv"
@@ -12,8 +17,11 @@ product_data = pd.read_csv(PRODUCTS_DATA)
 
 
 def merge_items_and_order_items_to_find_sales(o_i_data, product_data):
+    """Finding all the sales items"""
 
     sales_items = o_i_data.merge(product_data, how="left", on="sku")
+
+    # sold for less than wholesale purchase
     sales_items = sales_items[sales_items["wholesale_cost"] >= sales_items["unit_price"]]
     return sales_items
 
