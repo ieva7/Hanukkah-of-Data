@@ -1,49 +1,60 @@
+"""Thankfully, this woman I met on Tinder came over at 5am with her bike chain
+repair kit and some pastries from Noah’s. Apparently she liked to get up before
+dawn and claim the first pastries that came out of the oven."""
 import pandas as pd
 
 CUSTOMER_DATA = "./noahs-csv/noahs-customers.csv"
 ORDER_DATA = "./noahs-csv/noahs-orders.csv"
-ORDER_ITEMS_DATA = "./noahs-csv/noahs-orders_items.csv"
+ORDER_DETAIL_DATA = "./noahs-csv/noahs-orders_items.csv"
 PRODUCTS_DATA = "./noahs-csv/noahs-products.csv"
 
 
-people_data = pd.read_csv(CUSTOMER_DATA)
-o_data = pd.read_csv(ORDER_DATA)
-o_i_data = pd.read_csv(ORDER_ITEMS_DATA)
-p_data = pd.read_csv(PRODUCTS_DATA)
+def find_by_time_of_purchase(orders: pd.DataFrame):
+    """Find in-store orders between 3-5am, after buying carpet cleaner but before 'years ago'"""
 
+    orders["ordered"] = pd.to_datetime(orders["ordered"])
+    orders.index = orders["ordered"]
+    # Store is in Manhattan, Tapestry man is in Queens, South Ozone Park. Most time it would take to get from
+    # Manhattan to his is 1.5hrs according to Google
+    orders = orders.between_time("03:00", "05:00")
+    orders = orders[orders['ordered'].between("2017-02-18", "2018-12-31")]
 
-
-def find_by_time_of_purchase(o_data: pd.DataFrame, people_data, items, products):
-    """Find orders before 5am and between 2017 and 2018"""
-    o_data["ordered"] = pd.to_datetime(o_data["ordered"])
-    o_data.index = o_data["ordered"]
-    o_data = o_data.between_time("00:00", "05:00")
-    o_data = o_data[o_data['ordered'].between("2017-04-17", "2023-12-31")]
     # transaction in-person
-    o_data = o_data[o_data["ordered"] == o_data["shipped"]]
+    orders = orders[orders["ordered"] == orders["shipped"]]
+
+    return orders
+
+
+def find_items(orderid: str, order_details: pd.DataFrame, products: pd.DataFrame) -> list:
+    """Finds the item names by sku"""
+
+    items = list(order_details[order_details["orderid"] == orderid]["sku"])
+
+    items = [products[products["sku"] == item]["desc"] for item in items]
+    return items
+
+
+if __name__ == "__main__":
+    customers = pd.read_csv(CUSTOMER_DATA)
+    orders = pd.read_csv(ORDER_DATA)
+    order_details = pd.read_csv(ORDER_DETAIL_DATA)
+    products = pd.read_csv(PRODUCTS_DATA)
+
+    orders = find_by_time_of_purchase(orders)
+
     # under 40 dollars
-    o_data = o_data[o_data["total"] <= 40]
+    orders = orders[orders["total"] <= 40]
 
-    suspects = people_data[people_data["customerid"].isin(o_data["customerid"])]
-    # of legal age
-    suspects = suspects[suspects["birthdate"] <= "2000-12-31"]
+    # customers of legal age
+    customers = customers[customers["birthdate"] <= "2000-12-31"]
 
-    big_marge = suspects.merge(o_data, how="left", on="customerid")
-    big_marge = big_marge.drop(columns=["total", "ordered", "items"])
-    big_marge = big_marge.merge(items, how="left", on="orderid")
-    big_marge = big_marge.drop(columns=["address"])
-    big_marge = big_marge.merge(products, how="left", on="sku")
-    big_marge = big_marge.drop(columns=["orderid", "sku"])
-
-    big_marge = big_marge[big_marge["desc"].str.contains("Twist")]
+    customers = customers.merge(orders, how="inner", on="customerid")[["name", "phone", "ordered", "orderid"]]
 
 
+    customers["items"] = customers["orderid"].apply(lambda x: find_items(x, order_details, products))
 
-    print(big_marge)
-    return big_marge
+    print(customers)
+    # frequent buyer of baked goods
+    #  Christina Booker  718-649-9036 2018-08-27 04:14:45    58193      [[Caraway Bagel]]
 
-
-suspects = find_by_time_of_purchase(o_data, people_data, o_i_data, p_data)
-
-# 204        5375  Christina Booker      Bronx, NY 10474  1981-01-08  718-649-9036  2022-07-15 04:38:38    2        7.25  Caraway Twist            6.15
 
