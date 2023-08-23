@@ -1,4 +1,4 @@
-"""she gave it to an acquaintance of hers who collects all sorts of junk. Apparently he owns
+"""Day8: she gave it to an acquaintance of hers who collects all sorts of junk. Apparently he owns
 an entire set of Noah’s collectibles! He probably still has the rug, even."""
 import pandas as pd
 
