@@ -1,4 +1,4 @@
-"""so I gave it to this guy who lived in my neighborhood. He said that he was
+"""Day3: so I gave it to this guy who lived in my neighborhood. He said that he was
 naturally assertive because he was a Aries born in the year of the Dog, so maybe
 he was able to clean it. I don’t remember his name. Last time I saw him, he was
 leaving the subway and carrying a bag from Noah’s."""

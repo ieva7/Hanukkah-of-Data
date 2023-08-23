@@ -47,6 +47,5 @@ if __name__ == "__main__":
     products = pd.read_csv(PRODUCTS_DATA)
 
     find_by_frequency(orders, find_sales(order_details, products), customers)
-
     # 8342,"Emily Randolph","1055A E 3rd St","Brooklyn, NY 11230","1988-10-30","914-868-0316"
 
