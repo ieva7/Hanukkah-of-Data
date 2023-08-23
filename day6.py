@@ -10,11 +10,6 @@ ORDER_DATA = "./noahs-csv/noahs-orders.csv"
 ORDER_ITEMS_DATA = "./noahs-csv/noahs-orders_items.csv"
 PRODUCTS_DATA = "./noahs-csv/noahs-products.csv"
 
-customers = pd.read_csv(CUSTOMER_DATA)
-order_data = pd.read_csv(ORDER_DATA)
-o_i_data = pd.read_csv(ORDER_ITEMS_DATA)
-product_data = pd.read_csv(PRODUCTS_DATA)
-
 
 def find_sales(order_details: pd.DataFrame, products: \
                                         pd.DataFrame) -> pd.DataFrame:

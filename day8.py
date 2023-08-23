@@ -5,7 +5,6 @@ import pandas as pd
 ORDER_DATA = "./noahs-csv/noahs-orders.csv"
 ORDER_ITEMS_DATA = "./noahs-csv/noahs-orders_items.csv"
 PRODUCTS_DATA = "./noahs-csv/noahs-products.csv"
-
 # new date: 2019-06-01
 
 def filter_by_noahs_collectibles(order_details, orders, products):
