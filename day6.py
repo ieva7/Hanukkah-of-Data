@@ -10,37 +10,43 @@ ORDER_DATA = "./noahs-csv/noahs-orders.csv"
 ORDER_ITEMS_DATA = "./noahs-csv/noahs-orders_items.csv"
 PRODUCTS_DATA = "./noahs-csv/noahs-products.csv"
 
-people_data = pd.read_csv(CUSTOMER_DATA)
+customers = pd.read_csv(CUSTOMER_DATA)
 order_data = pd.read_csv(ORDER_DATA)
 o_i_data = pd.read_csv(ORDER_ITEMS_DATA)
 product_data = pd.read_csv(PRODUCTS_DATA)
 
 
-def merge_items_and_order_items_to_find_sales(o_i_data, product_data):
+def find_sales(order_details: pd.DataFrame, products: \
+                                        pd.DataFrame) -> pd.DataFrame:
     """Finding all the sales items"""
 
-    sales_items = o_i_data.merge(product_data, how="left", on="sku")
+    sales_items = order_details.merge(products, how="left", on="sku")
 
     # sold for less than wholesale purchase
     sales_items = sales_items[sales_items["wholesale_cost"] >= sales_items["unit_price"]]
     return sales_items
 
-def find_by_time_of_purchase(o_data: pd.DataFrame, merged_sales_data, people_data):
 
-    o_data = o_data[o_data["ordered"] == o_data["shipped"]]
+def find_by_frequency(orders: pd.DataFrame, merged_sales_data: pd.DataFrame, customers: pd.DataFrame):
+    """Find top sales shoppers"""
 
-    order_data = merged_sales_data.merge(o_data, how="inner", on="orderid")
-    order_data = order_data.drop(columns=["shipped", "items", "qty", "sku", "wholesale_cost", "unit_price"])
+    orders = orders[orders["ordered"] == orders["shipped"]]
 
-    merge_with_people = order_data.merge(people_data, how="left", on="customerid")
+    order_data = merged_sales_data.merge(orders, how="inner", on="orderid")
 
-    frequency = merge_with_people["name"].value_counts()
+    merge_with_people = order_data.merge(customers, how="left", on="customerid")[["orderid", "desc", "name", "total"]]
+
+    frequency = merge_with_people["name"].value_counts().head()
     print(frequency)
-    # is emily our suspect? YES
+    # Emily Randolph  14, ahead by 9 purchases in first place
+
+if __name__ == "__main__":
+    customers = pd.read_csv(CUSTOMER_DATA)
+    orders = pd.read_csv(ORDER_DATA)
+    order_details = pd.read_csv(ORDER_ITEMS_DATA)
+    products = pd.read_csv(PRODUCTS_DATA)
+
+    find_by_frequency(orders, find_sales(order_details, products), customers)
+
     # 8342,"Emily Randolph","1055A E 3rd St","Brooklyn, NY 11230","1988-10-30","914-868-0316"
-
-
-sales_items = merge_items_and_order_items_to_find_sales(o_i_data, product_data)
-
-find_by_time_of_purchase(order_data, sales_items, people_data)
 
