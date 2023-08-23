@@ -56,5 +56,3 @@ if __name__ == "__main__":
     print(customers)
     # frequent buyer of baked goods
     #  Christina Booker  718-649-9036 2018-08-27 04:14:45    58193      [[Caraway Bagel]]
-
-

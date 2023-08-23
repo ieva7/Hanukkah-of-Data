@@ -32,4 +32,3 @@ if __name__ == "__main__":
     print(suspects)
     # this was it :)
     # 6674         7675       Anita Koch     106-51 214th St  Queens Village, NY 11429  1955-11-14  315-492-7411
-

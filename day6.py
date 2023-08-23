@@ -35,6 +35,7 @@ def find_by_frequency(orders: pd.DataFrame, merged_sales_data: pd.DataFrame, cus
     print(frequency)
     # Emily Randolph  14, ahead by 9 purchases in first place
 
+
 if __name__ == "__main__":
     customers = pd.read_csv(CUSTOMER_DATA)
     orders = pd.read_csv(ORDER_DATA)

@@ -20,7 +20,6 @@ def find_emilys_purchases(customers: pd.DataFrame, orders: pd.DataFrame) -> pd.D
     return data
 
 
-
 def filter_items(orders: pd.DataFrame, order_details: pd.DataFrame, products: \
                            pd.DataFrame):
     """Find purchases with variation"""
@@ -41,7 +40,6 @@ if __name__ == "__main__":
     orders = pd.read_csv(ORDER_DATA)
     order_details = pd.read_csv(ORDER_ITEMS_DATA)
     products = pd.read_csv(PRODUCTS_DATA)
-
 
     emily_orders = find_emilys_purchases(customers, orders)
     emily_orders = filter_items(emily_orders, order_details, products)
