@@ -1,3 +1,7 @@
+"""a woman in Queens Village came to pick it up. She was wearing a ‘Noah’s Market’ sweatshirt,
+and it was just covered in cat hair. When I suggested that a clowder of cats might ruin such a
+fine tapestry, she looked at me funny and said she only had ten or eleven cats and they were
+getting quite old and had cataracts now so they probably wouldn’t notice some old rug anyway."""
 import pandas as pd
 
 CUSTOMER_DATA = "./noahs-csv/noahs-customers.csv"
@@ -5,22 +9,27 @@ ORDER_DATA = "./noahs-csv/noahs-orders.csv"
 ORDER_ITEMS_DATA = "./noahs-csv/noahs-orders_items.csv"
 PRODUCTS_DATA = "./noahs-csv/noahs-products.csv"
 
-people_data = pd.read_csv(CUSTOMER_DATA)
-order_data = pd.read_csv(ORDER_DATA)
-o_i_data = pd.read_csv(ORDER_ITEMS_DATA)
-product_data = pd.read_csv(PRODUCTS_DATA)
 
-def find_by_time_of_purchase(o_data: pd.DataFrame, people_data, o_i_data, product_data):
+def find_by_time_of_purchase(orders: pd.DataFrame, customers: pd.DataFrame):
     # lives in queens village
-    people_data = people_data[people_data["citystatezip"].str.contains("Queens Village")]
+    customers = customers[customers["citystatezip"].str.contains("Queens Village")]
 
-    # bought cat food after the tapestry was given away to tinder bestie
-    o_data["ordered"] = pd.to_datetime(o_data["ordered"])
-    o_data.index = o_data["ordered"]
-    o_data = o_data[o_data['ordered'].between("2022-07-15", "2023-12-31")]
+    # bought cat food after the tapestry was given away to tinder woman
+    orders["ordered"] = pd.to_datetime(orders["ordered"])
+    orders.index = orders["ordered"]
+    orders = orders[orders['ordered'].between("2022-07-15", "2023-12-31")]
 
-    suspects = people_data[people_data["customerid"].isin(o_data["customerid"])]
+    return customers[customers["customerid"].isin(orders["customerid"])]
+
+
+if __name__ == "__main__":
+    customers = pd.read_csv(CUSTOMER_DATA)
+    orders = pd.read_csv(ORDER_DATA)
+    order_details = pd.read_csv(ORDER_ITEMS_DATA)
+    products = pd.read_csv(PRODUCTS_DATA)
+
+    suspects = find_by_time_of_purchase(orders, customers)
     print(suspects)
-    # this was it LMAO
+    # this was it :)
+    # 6674         7675       Anita Koch     106-51 214th St  Queens Village, NY 11429  1955-11-14  315-492-7411
 
-suspects = find_by_time_of_purchase(order_data, people_data, o_i_data, product_data)
